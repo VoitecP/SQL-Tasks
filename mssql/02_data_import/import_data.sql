@@ -4,7 +4,7 @@ GO
 
 -- STAGING TABLES
 
--- Customers Staging
+-- Customers 
 CREATE TABLE dbo.Customers_Staging (
     CustomerName NVARCHAR(100),
     ContactName NVARCHAR(100),
@@ -12,37 +12,39 @@ CREATE TABLE dbo.Customers_Staging (
 );
 
 
--- Employees Staging
+-- Employees 
 CREATE TABLE dbo.Employees_Staging (
     FirstName NVARCHAR(50),
     LastName NVARCHAR(50)
 );
 
--- Categories Staging
+-- Categories 
 CREATE TABLE dbo.Categories_Staging (   
     CategoryName NVARCHAR(50)
 );  
 
--- Suppliers Staging       
+-- Suppliers        
 CREATE TABLE dbo.Suppliers_Staging (
     SupplierName NVARCHAR(100),
     Country NVARCHAR(50)
 );
 
--- Products Staging   
+-- Products    
 CREATE TABLE dbo.Products_Staging ( 
     ProductName NVARCHAR(100),
     SupplierID INT,
     CategoryID INT,
-    Price DECIMAL(10,2)
+    -- Price DECIMAL(10,2)
+    Price NVARCHAR(20)
+    
 );  
 
--- Shippers Staging        
+-- Shippers         
 CREATE TABLE dbo.Shippers_Staging ( 
     ShipperName NVARCHAR(100)
 );  
 
--- Orders Staging      
+-- Orders       
 CREATE TABLE dbo.Orders_Staging (   
     CustomerID INT,
     EmployeeID INT,
@@ -50,18 +52,18 @@ CREATE TABLE dbo.Orders_Staging (
     ShipperID INT
 );          
 
--- OrderDetails Staging       
+-- OrderDetails        
 CREATE TABLE dbo.OrderDetails_Staging ( 
     OrderID INT,
     ProductID INT,
     Quantity INT
 );  
 
--- BULK Import
+-- Bulk Insert
 
 -- Customers
 BULK INSERT dbo.Customers_Staging
-FROM 'C:\csv\Customers.csv'   
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Customers.csv'   
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -71,7 +73,7 @@ WITH (
 
 -- Employees
 BULK INSERT dbo.Employees_Staging 
-FROM 'C:\csv\Employees.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Employees.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -82,7 +84,7 @@ WITH (
 -- Categories
 BULK INSERT dbo.Categories_Staging
 -- FROM '.csv\Categories.csv'
-FROM 'C:\csv\Categories.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Categories.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -92,7 +94,7 @@ WITH (
 
 -- Suppliers
 BULK INSERT dbo.Suppliers_Staging       
-FROM 'C:\csv\Suppliers.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Suppliers.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -102,7 +104,7 @@ WITH (
 
 -- Products
 BULK INSERT dbo.Products_Staging   
-FROM 'C:\csv\Products.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Products.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -112,7 +114,7 @@ WITH (
 
 -- Shippers
 BULK INSERT dbo.Shippers_Staging        
-FROM 'C:\csv\Shippers.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Shippers.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -122,7 +124,7 @@ WITH (
 
 -- Orders
 BULK INSERT dbo.Orders_Staging      
-FROM 'C:\csv\Orders.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\Orders.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -132,7 +134,7 @@ WITH (
 
 -- OrderDetails
 BULK INSERT dbo.OrderDetails_Staging        
-FROM 'C:\csv\OrderDetails.csv'
+FROM 'C:\GitHub\SQL-Tasks\mssql\02_data_import\csv\OrderDetails.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -141,7 +143,6 @@ WITH (
 );
 
 -- Data migration
-
 
 -- Customers
 INSERT INTO dbo.Customers (CustomerName, ContactName, Country)
@@ -165,7 +166,14 @@ FROM dbo.Suppliers_Staging;
 
 -- Products
 INSERT INTO dbo.Products (ProductName, SupplierID, CategoryID, Price)   
-SELECT ProductName, SupplierID, CategoryID, Price
+SELECT ProductName, SupplierID, CategoryID
+    -- , Price
+    , CAST ( REPLACE 
+                ( REPLACE
+                    (Price, '"',''), ',','.')               
+            AS DECIMAL(10,2)         
+            )
+
 FROM dbo.Products_Staging;
 
 -- Shippers
