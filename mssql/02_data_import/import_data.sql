@@ -168,11 +168,11 @@ FROM dbo.Suppliers_Staging;
 INSERT INTO dbo.Products (ProductName, SupplierID, CategoryID, Price)   
 SELECT ProductName, SupplierID, CategoryID
     -- , Price
-    , CAST ( REPLACE 
-                ( REPLACE
-                    (Price, '"',''), ',','.')               
-            AS DECIMAL(10,2)         
-            )
+    , CAST ( 
+        REPLACE ( 
+            REPLACE(Price, '"',''), ',','.'
+            ) AS DECIMAL(10,2)         
+        )
 
 FROM dbo.Products_Staging;
 
@@ -191,27 +191,27 @@ INSERT INTO dbo.OrderDetails (OrderID, ProductID, Quantity)
 SELECT OrderID, ProductID, Quantity
 FROM dbo.OrderDetails_Staging;
 
--- Truncate staging tables
+-- -- Truncate staging tables
 
-TRUNCATE TABLE dbo.Customers_Staging;
-TRUNCATE TABLE dbo.Employees_Staging;
-TRUNCATE TABLE dbo.Categories_Staging;  
-TRUNCATE TABLE dbo.Suppliers_Staging;
-TRUNCATE TABLE dbo.Products_Staging;
-TRUNCATE TABLE dbo.Shippers_Staging;
-TRUNCATE TABLE dbo.Orders_Staging;
-TRUNCATE TABLE dbo.OrderDetails_Staging;
+-- TRUNCATE TABLE dbo.Customers_Staging;
+-- TRUNCATE TABLE dbo.Employees_Staging;
+-- TRUNCATE TABLE dbo.Categories_Staging;  
+-- TRUNCATE TABLE dbo.Suppliers_Staging;
+-- TRUNCATE TABLE dbo.Products_Staging;
+-- TRUNCATE TABLE dbo.Shippers_Staging;
+-- TRUNCATE TABLE dbo.Orders_Staging;
+-- TRUNCATE TABLE dbo.OrderDetails_Staging;
 
 -- Drop staging tables
 
--- DROP TABLE dbo.Customers_Staging;
--- DROP TABLE dbo.Employees_Staging;
--- DROP TABLE dbo.Categories_Staging;
--- DROP TABLE dbo.Suppliers_Staging;
--- DROP TABLE dbo.Products_Staging;
--- DROP TABLE dbo.Shippers_Staging;
--- DROP TABLE dbo.Orders_Staging;
--- DROP TABLE dbo.OrderDetails_Staging;
+DROP TABLE dbo.Customers_Staging;
+DROP TABLE dbo.Employees_Staging;
+DROP TABLE dbo.Categories_Staging;
+DROP TABLE dbo.Suppliers_Staging;
+DROP TABLE dbo.Products_Staging;
+DROP TABLE dbo.Shippers_Staging;
+DROP TABLE dbo.Orders_Staging;
+DROP TABLE dbo.OrderDetails_Staging;
 
 
 
