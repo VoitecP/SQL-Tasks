@@ -1,3 +1,7 @@
+-- Top 20 Products
+USE datasetDB;
+GO
+
 -- Preparing data table
 IF OBJECT_ID('dbo.Top20Products','U') IS NULL
     BEGIN

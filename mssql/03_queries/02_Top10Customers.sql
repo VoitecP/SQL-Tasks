@@ -1,3 +1,8 @@
+-- Top 10 Customers
+
+USE datasetDB;
+GO
+
 -- Preparing data table
 IF OBJECT_ID('dbo.Top10Customers','U') IS NULL
     BEGIN
