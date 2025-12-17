@@ -1,4 +1,4 @@
-CustomerID,CustomerName,TotalOrderValue
+CustomerID,CustomerName,SumOrderValue
 490,Taylor Market,31806.60
 336,Moore Services,25589.45
 229,Rodriguez Trading,24417.26

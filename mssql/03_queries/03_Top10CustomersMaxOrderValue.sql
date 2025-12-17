@@ -3,9 +3,9 @@ USE datasetDB;
 GO
 
 -- Preparing data table
-IF OBJECT_ID('dbo.Top10CustomersTopSingleOrders','U') IS NULL
+IF OBJECT_ID('dbo.Top10CustomersMaxTotalOrderValue','U') IS NULL
     BEGIN
-        CREATE TABLE dbo.Top10CustomersTopSingleOrders (
+        CREATE TABLE dbo.Top10CustomersMaxTotalOrderValue (
             CustomerID INT,
             CustomerName NVARCHAR(100),
             MaxOrderValue DECIMAL(12,2)
@@ -13,7 +13,7 @@ IF OBJECT_ID('dbo.Top10CustomersTopSingleOrders','U') IS NULL
     END
 ELSE
     BEGIN
-        TRUNCATE TABLE dbo.Top10CustomersTopSingleOrders;
+        TRUNCATE TABLE dbo.Top10CustomersMaxTotalOrderValue;
     END
 ;
 
@@ -22,7 +22,7 @@ WITH OrderValues AS (
     SELECT
         o.OrderID,
         o.CustomerID,
-        SUM (od.Quantity * p.Price) AS OrderTotal
+        SUM (od.Quantity * p.Price) AS OrderTotal -- MAX / SUM OrderTotal  (option)
 
     FROM Orders o
     JOIN OrderDetails od ON od.OrderID = o.OrderID
@@ -39,7 +39,7 @@ CustomerMaxOrders AS (
 )
 
 --Query
-INSERT INTO dbo.Top10CustomersTopSingleOrders (CustomerID, CustomerName, MaxOrderValue)
+INSERT INTO dbo.Top10CustomersMaxTotalOrderValue (CustomerID, CustomerName, MaxOrderValue)
 
 SELECT TOP 10
     c.CustomerID,
